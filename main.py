@@ -1,61 +1,114 @@
-from telegram import Update
+from telegram import (
+    Update,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+)
+
 from telegram.ext import (
     ApplicationBuilder,
-    MessageHandler,
     CommandHandler,
-    filters,
+    MessageHandler,
+    CallbackQueryHandler,
     ContextTypes,
+    filters
 )
 
 from openai import OpenAI
-import os
 
-# التوكنات
+import sqlite3
+import os
+import requests
+import tempfile
+
+# ==========================
+# TOKENS
+# ==========================
+
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# تشغيل OpenAI
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# أمر البداية
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("أهلاً بك 👋 أنا Kasper AI Bot")
+# ==========================
+# DATABASE
+# ==========================
 
-# الرد على الرسائل
-async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        user_message = update.message.text
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "أنت مساعد ذكي وتتحدث العربية."
-                },
-                {
-                    "role": "user",
-                    "content": user_message
-                }
-            ]
-        )
-
-        answer = response.choices[0].message.content
-
-        await update.message.reply_text(answer)
-
-    except Exception as e:
-        await update.message.reply_text(f"حدث خطأ:\n{e}")
-
-# تشغيل التطبيق
-app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
-
-# handlers
-app.add_handler(CommandHandler("start", start))
-app.add_handler(
-    MessageHandler(filters.TEXT & ~filters.COMMAND, reply)
+db = sqlite3.connect(
+    "memory.db",
+    check_same_thread=False
 )
 
-print("Bot is running...")
+cursor = db.cursor()
 
-app.run_polling()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS conversations(
+    user_id INTEGER,
+    role TEXT,
+    content TEXT
+)
+""")
+
+db.commit()
+
+MAX_MEMORY = 20
+
+# ==========================
+# MEMORY FUNCTIONS
+# ==========================
+
+def save_message(user_id, role, content):
+    cursor.execute(
+        "INSERT INTO conversations VALUES (?, ?, ?)",
+        (user_id, role, content)
+    )
+    db.commit()
+
+def get_history(user_id):
+
+    cursor.execute("""
+    SELECT role, content
+    FROM conversations
+    WHERE user_id=?
+    ORDER BY rowid DESC
+    LIMIT ?
+    """, (user_id, MAX_MEMORY))
+
+    rows = cursor.fetchall()
+
+    rows.reverse()
+
+    messages = [
+        {
+            "role": "system",
+            "content":
+            """
+            أنت Kasper AI.
+
+            مساعد ذكي متقدم.
+            تتحدث العربية بطلاقة.
+            تجيب باحترافية.
+            تساعد في البرمجة.
+            تساعد في الأعمال.
+            تساعد في التصميم.
+            تساعد في الدراسة.
+            تساعد في كتابة المحتوى.
+            """
+        }
+    ]
+
+    for role, content in rows:
+        messages.append({
+            "role": role,
+            "content": content
+        })
+
+    return messages
+
+def clear_memory(user_id):
+
+    cursor.execute(
+        "DELETE FROM conversations WHERE user_id=?",
+        (user_id,)
+    )
+
+    db.commit()
