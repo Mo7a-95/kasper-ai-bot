@@ -328,6 +328,11 @@ async def generate_image(
         await update.message.reply_text(
             f"❌ {e}"
         )
+        async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        f"🆔 Your ID:\n{update.effective_user.id}"
+    )
         # ==========================
 # RUN
 # ==========================
@@ -375,4 +380,10 @@ print("🚀 Kasper AI Bot Started")
 
 app.run_polling(
     drop_pending_updates=True
+)
+app.add_handler(
+    CommandHandler("clear", clear)
+)
+app.add_handler(
+    CommandHandler("myid", myid)
 )
