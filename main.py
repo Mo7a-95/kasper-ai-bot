@@ -27,6 +27,8 @@ import tempfile
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+ADMIN_ID = 685333833
+
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # ==========================
@@ -332,10 +334,17 @@ async def generate_image(
 # MY ID
 # ==========================
 
-async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    if update.effective_user.id != ADMIN_ID:
+
+        await update.message.reply_text(
+            "❌ هذا الأمر للمشرف فقط."
+        )
+        return
 
     await update.message.reply_text(
-        f"🆔 Your ID:\n{update.effective_user.id}"
+        "👑 مرحباً أيها المشرف."
     )
 
 
@@ -373,6 +382,10 @@ app.add_handler(
 
 app.add_handler(
     CommandHandler("myid", myid)
+)
+
+app.add_handler(
+    CommandHandler("admin", admin)
 )
 
 app.add_handler(
