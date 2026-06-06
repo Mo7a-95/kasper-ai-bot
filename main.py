@@ -323,73 +323,11 @@ async def generate_image(
             )
         )
 
-   except Exception as e:
+    except Exception as e:
 
-    await update.message.reply_text(
-        f"❌ {e}"
-    )
-
-
-# ==========================
-# MY ID
-# ==========================
-
-async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-    await update.message.reply_text(
-        f"🆔 Your ID:\n{update.effective_user.id}"
-    )
-
-
-# ==========================
-# RUN
-# ==========================
-
-app = ApplicationBuilder().token(
-    TELEGRAM_BOT_TOKEN
-).build()
-
-app.add_handler(
-    CommandHandler("start", start)
-)
-
-app.add_handler(
-    CommandHandler("help", help_command)
-)
-
-app.add_handler(
-    CommandHandler("newchat", newchat)
-)
-
-app.add_handler(
-    CommandHandler("memory", memory)
-)
-
-app.add_handler(
-    CommandHandler("clear", clear)
-)
-
-app.add_handler(
-    CommandHandler("image", generate_image)
-)
-app.add_handler(
-    CommandHandler("myid", myid)
-)
-
-app.add_handler(
-    CallbackQueryHandler(button_handler)
-)
-
-app.add_handler(
-    MessageHandler(
-        filters.TEXT & ~filters.COMMAND,
-        chat
-    )
-)
-
-print("🚀 Kasper AI Bot Started")
-
-app.run_polling(
+        await update.message.reply_text(
+            f"❌ {e}"
+        )
     drop_pending_updates=True
 )
 
