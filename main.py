@@ -323,17 +323,25 @@ async def generate_image(
             )
         )
 
-    except Exception as e:
+   except Exception as e:
 
-        await update.message.reply_text(
-            f"❌ {e}"
-        )
-        async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        f"❌ {e}"
+    )
+
+
+# ==========================
+# MY ID
+# ==========================
+
+async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"🆔 Your ID:\n{update.effective_user.id}"
     )
-        # ==========================
+
+
+# ==========================
 # RUN
 # ==========================
 
@@ -364,6 +372,9 @@ app.add_handler(
 app.add_handler(
     CommandHandler("image", generate_image)
 )
+app.add_handler(
+    CommandHandler("myid", myid)
+)
 
 app.add_handler(
     CallbackQueryHandler(button_handler)
@@ -381,9 +392,4 @@ print("🚀 Kasper AI Bot Started")
 app.run_polling(
     drop_pending_updates=True
 )
-app.add_handler(
-    CommandHandler("clear", clear)
-)
-app.add_handler(
-    CommandHandler("myid", myid)
-)
+
