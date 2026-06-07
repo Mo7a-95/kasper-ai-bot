@@ -347,7 +347,11 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👑 مرحباً أيها المشرف."
     )
 
+async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    await update.message.reply_text(
+        f"🆔 Your ID:\n{update.effective_user.id}"
+    )
 # ==========================
 # RUN
 # ==========================
