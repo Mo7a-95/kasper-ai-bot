@@ -352,6 +352,33 @@ async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         f"🆔 Your ID:\n{update.effective_user.id}"
     )
+
+ keyboard = [
+        [
+            InlineKeyboardButton(
+                "📊 الإحصائيات",
+                callback_data="admin_stats"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "👥 المستخدمون",
+                callback_data="admin_users"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "📢 إرسال إعلان",
+                callback_data="admin_broadcast"
+            )
+        ]
+    ]
+
+    await update.message.reply_text(
+        "👑 لوحة المشرف",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
 # ==========================
 # RUN
 # ==========================
@@ -394,7 +421,23 @@ app.add_handler(
 
 app.add_handler(
     CallbackQueryHandler(button_handler)
-)
+    elif query.data == "admin_stats":
+
+    await query.message.reply_text(
+        "📊 الإحصائيات قريباً"
+    )
+
+elif query.data == "admin_users":
+
+    await query.message.reply_text(
+        "👥 المستخدمون قريباً"
+    )
+
+elif query.data == "admin_broadcast":
+
+    await query.message.reply_text(
+        "📢 البث الجماعي قريباً"
+    )
 
 app.add_handler(
     MessageHandler(
