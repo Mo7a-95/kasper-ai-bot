@@ -336,6 +336,7 @@ async def generate_image(
 
 async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+
 if update.effective_user.id != ADMIN_ID:
 
     await update.message.reply_text(
@@ -368,6 +369,16 @@ await update.message.reply_text(
     "👑 لوحة المشرف",
     reply_markup=InlineKeyboardMarkup(keyboard)
 )
+
+
+async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+
+await update.message.reply_text(
+    f"🆔 Your ID:\n{update.effective_user.id}"
+)
+
+
 
 # ==========================
 # MY ID
@@ -435,3 +446,4 @@ print("🚀 Kasper AI Bot Started")
 app.run_polling(
 drop_pending_updates=True
 )
+
