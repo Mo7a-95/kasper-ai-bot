@@ -331,123 +331,107 @@ async def generate_image(
             f"❌ {e}"
         )
 # ==========================
-# MY ID
+# ADMIN PANEL
 # ==========================
 
 async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    if update.effective_user.id != ADMIN_ID:
-
-        await update.message.reply_text(
-            "❌ هذا الأمر للمشرف فقط."
-        )
-        return
+if update.effective_user.id != ADMIN_ID:
 
     await update.message.reply_text(
-        "👑 مرحباً أيها المشرف."
+        "❌ هذا الأمر للمشرف فقط."
     )
+    return
+
+keyboard = [
+    [
+        InlineKeyboardButton(
+            "📊 الإحصائيات",
+            callback_data="admin_stats"
+        )
+    ],
+    [
+        InlineKeyboardButton(
+            "👥 المستخدمون",
+            callback_data="admin_users"
+        )
+    ],
+    [
+        InlineKeyboardButton(
+            "📢 إرسال إعلان",
+            callback_data="admin_broadcast"
+        )
+    ]
+]
+
+await update.message.reply_text(
+    "👑 لوحة المشرف",
+    reply_markup=InlineKeyboardMarkup(keyboard)
+)
+
+# ==========================
+# MY ID
+# ==========================
 
 async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    await update.message.reply_text(
-        f"🆔 Your ID:\n{update.effective_user.id}"
-    )
-
- keyboard = [
-        [
-            InlineKeyboardButton(
-                "📊 الإحصائيات",
-                callback_data="admin_stats"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                "👥 المستخدمون",
-                callback_data="admin_users"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                "📢 إرسال إعلان",
-                callback_data="admin_broadcast"
-            )
-        ]
-    ]
-
-    await update.message.reply_text(
-        "👑 لوحة المشرف",
-        reply_markup=InlineKeyboardMarkup(keyboard)
-    )
+await update.message.reply_text(
+    f"🆔 Your ID:\n{update.effective_user.id}"
+)
 
 # ==========================
 # RUN
 # ==========================
 
 app = ApplicationBuilder().token(
-    TELEGRAM_BOT_TOKEN
+TELEGRAM_BOT_TOKEN
 ).build()
 
 app.add_handler(
-    CommandHandler("start", start)
+CommandHandler("start", start)
 )
 
 app.add_handler(
-    CommandHandler("help", help_command)
+CommandHandler("help", help_command)
 )
 
 app.add_handler(
-    CommandHandler("newchat", newchat)
+CommandHandler("newchat", newchat)
 )
 
 app.add_handler(
-    CommandHandler("memory", memory)
+CommandHandler("memory", memory)
 )
 
 app.add_handler(
-    CommandHandler("clear", clear)
+CommandHandler("clear", clear)
 )
 
 app.add_handler(
-    CommandHandler("image", generate_image)
+CommandHandler("image", generate_image)
 )
 
 app.add_handler(
-    CommandHandler("myid", myid)
+CommandHandler("myid", myid)
 )
 
 app.add_handler(
-    CommandHandler("admin", admin)
+CommandHandler("admin", admin)
 )
 
 app.add_handler(
-    CallbackQueryHandler(button_handler)
-    elif query.data == "admin_stats":
-
-    await query.message.reply_text(
-        "📊 الإحصائيات قريباً"
-    )
-
-elif query.data == "admin_users":
-
-    await query.message.reply_text(
-        "👥 المستخدمون قريباً"
-    )
-
-elif query.data == "admin_broadcast":
-
-    await query.message.reply_text(
-        "📢 البث الجماعي قريباً"
-    )
+CallbackQueryHandler(button_handler)
+)
 
 app.add_handler(
-    MessageHandler(
-        filters.TEXT & ~filters.COMMAND,
-        chat
-    )
+MessageHandler(
+filters.TEXT & ~filters.COMMAND,
+chat
+)
 )
 
 print("🚀 Kasper AI Bot Started")
 
 app.run_polling(
-    drop_pending_updates=True
+drop_pending_updates=True
 )
