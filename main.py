@@ -331,69 +331,57 @@ async def generate_image(
             f"❌ {e}"
         )
 # ==========================
-
 # ADMIN PANEL
-
 # ==========================
 
 async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-if update.effective_user.id != ADMIN_ID:
+    if update.effective_user.id != ADMIN_ID:
 
-    await update.message.reply_text(
-        "❌ هذا الأمر للمشرف فقط."
-    )
-    return
+        await update.message.reply_text(
+            "❌ هذا الأمر للمشرف فقط."
+        )
+        return
 
-keyboard = [
-    [
-        InlineKeyboardButton(
-            "📊 الإحصائيات",
-            callback_data="admin_stats"
-        )
-    ],
-    [
-        InlineKeyboardButton(
-            "👥 المستخدمون",
-            callback_data="admin_users"
-        )
-    ],
-    [
-        InlineKeyboardButton(
-            "📢 إرسال إعلان",
-            callback_data="admin_broadcast"
-        )
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "📊 الإحصائيات",
+                callback_data="admin_stats"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "👥 المستخدمون",
+                callback_data="admin_users"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "📢 إرسال إعلان",
+                callback_data="admin_broadcast"
+            )
+        ]
     ]
-]
 
-await update.message.reply_text(
-    "👑 لوحة المشرف",
-    reply_markup=InlineKeyboardMarkup(keyboard)
-)
-
-async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-await update.message.reply_text(
-    f"🆔 Your ID:\n{update.effective_user.id}"
-)
+    await update.message.reply_text(
+        "👑 لوحة المشرف",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
 
 
 # ==========================
-
 # MY ID
-
 # ==========================
 
 async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
-    f"🆔 Your ID:\n{update.effective_user.id}"
-)
+        f"🆔 Your ID:\n{update.effective_user.id}"
+    )
 
 # ==========================
-
 # RUN
-
 # ==========================
 
 app = ApplicationBuilder().token(
