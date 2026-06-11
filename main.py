@@ -447,6 +447,51 @@ async def smart_command(update, context):
     await update.message.reply_text(
         response.choices[0].message.content
     )
+
+async def agent(update, context):
+
+    task = " ".join(context.args)
+
+    if not task:
+        await update.message.reply_text(
+            "استخدم:\n/agent المهمة"
+        )
+        return
+
+    await update.message.reply_text(
+        "🧠 جاري تحليل المهمة..."
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": "system",
+                "content": """
+أنت وكيل ذكاء اصطناعي مستقل.
+
+قبل الإجابة:
+
+1. افهم الهدف النهائي.
+2. قسم المهمة إلى خطوات.
+3. نفذ كل خطوة بالتفصيل.
+4. راجع النتيجة.
+5. قدم أفضل إجابة نهائية.
+
+لا تعط إجابة سريعة.
+فكر وخطط أولاً.
+"""
+            },
+            {
+                "role": "user",
+                "content": task
+            }
+        ]
+    )
+
+    await update.message.reply_text(
+        response.choices[0].message.content
+    )
     
 # ==========================
 # RUN
