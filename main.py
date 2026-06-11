@@ -1,3 +1,4 @@
+from telegram import BotCommand
 from telegram import (
     Update,
     InlineKeyboardButton,
@@ -506,8 +507,32 @@ chat
 )
 )
 
+async def set_commands(app):
+
+    commands = [
+        BotCommand("start", "بدء البوت"),
+        BotCommand("help", "المساعدة"),
+        BotCommand("newchat", "محادثة جديدة"),
+        BotCommand("memory", "عرض الذاكرة"),
+        BotCommand("clear", "مسح الذاكرة"),
+        BotCommand("image", "إنشاء صورة"),
+
+        BotCommand("think", "تفكير عميق"),
+        BotCommand("research", "بحث شامل"),
+        BotCommand("debate", "مناقشة موضوع"),
+        BotCommand("translate", "ترجمة"),
+        BotCommand("rewrite", "إعادة صياغة"),
+        BotCommand("seo", "تحسين SEO"),
+        BotCommand("code", "كتابة أكواد")
+    ]
+
+    await app.bot.set_my_commands(commands)
+    
 print("🚀 Kasper AI Bot Started")
 
+app.post_init = set_commands
+
 app.run_polling(
-drop_pending_updates=True
+    drop_pending_updates=True
 )
+
