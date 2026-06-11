@@ -460,9 +460,56 @@ app.add_handler(
 CommandHandler("start", start)
 )
 
-app.add_handler(
-CommandHandler("help", help_command)
-)
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    text = """
+🤖 Kasper AI
+
+الأوامر الأساسية:
+
+/start
+بدء البوت
+
+/help
+المساعدة
+
+/newchat
+بدء محادثة جديدة
+
+/memory
+عرض الذاكرة
+
+/clear
+مسح الذاكرة
+
+/image وصف الصورة
+إنشاء صورة
+
+🧠 الأوامر الذكية:
+
+/think سؤال
+تفكير عميق
+
+/research موضوع
+بحث وتحليل شامل
+
+/debate موضوع
+مناقشة من عدة زوايا
+
+/translate نص
+ترجمة
+
+/rewrite نص
+إعادة صياغة
+
+/seo نص
+تحسين SEO
+
+/code طلب
+كتابة أكواد برمجية
+"""
+
+    await update.message.reply_text(text)
 
 app.add_handler(
 CommandHandler("newchat", newchat)
