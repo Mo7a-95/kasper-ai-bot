@@ -381,6 +381,73 @@ async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 # ==========================
+# SMART COMMANDS
+# ==========================
+
+SMART_COMMANDS = {
+    "think": """
+فكر بعمق قبل الإجابة.
+حلل الموضوع خطوة بخطوة.
+""",
+
+    "research": """
+قم ببحث وتحليل شامل للموضوع.
+اعرض التفاصيل المهمة.
+""",
+
+    "debate": """
+ناقش الموضوع من عدة وجهات نظر.
+اعرض الإيجابيات والسلبيات.
+""",
+
+    "translate": """
+ترجم النص باحترافية.
+""",
+
+    "rewrite": """
+أعد صياغة النص بشكل احترافي.
+""",
+
+    "seo": """
+حسن النص لمحركات البحث SEO.
+""",
+
+    "code": """
+أنت مبرمج خبير.
+اكتب أكواد احترافية.
+""",
+}
+
+async def smart_command(update, context):
+
+    command = update.message.text.split()[0][1:]
+    user_text = " ".join(context.args)
+
+    if not user_text:
+        await update.message.reply_text(
+            f"استخدم:\n/{command} النص"
+        )
+        return
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": SMART_COMMANDS[command]
+            },
+            {
+                "role": "user",
+                "content": user_text
+            }
+        ]
+    )
+
+    await update.message.reply_text(
+        response.choices[0].message.content
+    )
+    
+# ==========================
 # RUN
 # ==========================
 
@@ -420,6 +487,14 @@ app.add_handler(
 CommandHandler("admin", admin)
 )
 
+for cmd in SMART_COMMANDS:
+    app.add_handler(
+        CommandHandler(
+            cmd,
+            smart_command
+        )
+    )
+    
 app.add_handler(
 CallbackQueryHandler(button_handler)
 )
