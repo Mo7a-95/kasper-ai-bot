@@ -19,7 +19,6 @@ from openai import OpenAI
 import sqlite3
 import os
 import requests
-import PyPDF2
 
 # ==========================
 # TOKENS
