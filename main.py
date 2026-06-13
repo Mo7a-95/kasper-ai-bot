@@ -276,7 +276,12 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         user_id = update.effective_user.id
         user_message = update.message.text
-        
+
+        save_message(
+            user_id,
+            "user",
+            user_message
+        )
 
         messages = get_history(user_id)
 
@@ -294,15 +299,16 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         await update.message.reply_text(answer)
-    
-except Exception as e:
-    print("IMAGE ERROR:", e)
 
-    await update.message.reply_text(
-        f"❌ {e}"
-    )
+    except Exception as e:
 
-        # ==========================
+        print("CHAT ERROR:", e)
+
+        await update.message.reply_text(
+            f"❌ {e}"
+        )
+
+# ==========================
 # IMAGE GENERATION
 # ==========================
 
