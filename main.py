@@ -546,18 +546,18 @@ async def analyze_pdf(
             document.file_id
         )
 
-        import tempfile
+import tempfile
 
-        with tempfile.NamedTemporaryFile(
+with tempfile.NamedTemporaryFile(
     suffix=".pdf",
     delete=False
 ) as temp_file:
 
     pdf_path = temp_file.name
 
-        await file.download_to_drive(
-            pdf_path
-        )
+await file.download_to_drive(
+    pdf_path
+)
 
         text = ""
 
