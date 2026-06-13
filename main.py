@@ -20,6 +20,7 @@ import sqlite3
 import os
 import requests
 import tempfile
+import PyPDF2
 
 # ==========================
 # TOKENS
@@ -51,9 +52,18 @@ CREATE TABLE IF NOT EXISTS conversations(
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users(
+    user_id INTEGER PRIMARY KEY,
+    username TEXT,
+    first_name TEXT,
+    join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
+
 db.commit()
 
-MAX_MEMORY = 20
+MAX_MEMORY = 100
 
 # ==========================
 # MEMORY FUNCTIONS
@@ -107,22 +117,32 @@ def get_history(user_id):
 
     return messages
 
-def clear_memory(user_id):
+def save_user(user):
 
     cursor.execute(
-        "DELETE FROM conversations WHERE user_id=?",
-        (user_id,)
+        """
+        INSERT OR IGNORE INTO users
+        (user_id, username, first_name)
+        VALUES (?, ?, ?)
+        """,
+        (
+            user.id,
+            user.username,
+            user.first_name
+        )
     )
 
     db.commit()
+    
     # ==========================
 # COMMANDS
 # ==========================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    save_user(update.effective_user)
+
     keyboard = [
-        [
             InlineKeyboardButton("🧠 الذاكرة", callback_data="memory"),
             InlineKeyboardButton("🗑 مسح الذاكرة", callback_data="clear")
         ],
@@ -210,6 +230,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if query.data == "memory":
 
+    if query.data == "admin_stats":
+
+    if query.data == "admin_users":
+
+    if query.data == "admin_broadcast":
+        
         user_id = query.from_user.id
 
         cursor.execute(
@@ -244,13 +270,10 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
 
+        save_user(update.effective_user)
+
         user_id = update.effective_user.id
         user_message = update.message.text
-
-        save_message(
-            user_id,
-            "user",
-            user_message
         )
 
         messages = get_history(user_id)
@@ -269,68 +292,69 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         await update.message.reply_text(answer)
+    
+except Exception as e:
+    print("IMAGE ERROR:", e)
 
-    except Exception as e:
+    await update.message.reply_text(
+        f"❌ {e}"
+    )
 
-        await update.message.reply_text(
-            f"❌ خطأ:\n{e}"
-        )
         # ==========================
 # IMAGE GENERATION
 # ==========================
 
-async def generate_image(
+async def analyze_photo(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE
 ):
-
     try:
 
-        prompt = " ".join(context.args)
-
-        if not prompt:
-
-            await update.message.reply_text(
-                "اكتب وصفاً بعد الأمر."
-            )
-            return
-
         await update.message.reply_text(
-            "🎨 جاري إنشاء الصورة..."
+            "🖼 جاري تحليل الصورة..."
         )
 
-        result = client.images.generate(
-            model="gpt-image-1",
-            prompt=prompt,
-            size="1024x1024"
+        photo = update.message.photo[-1]
+
+        file = await context.bot.get_file(
+            photo.file_id
         )
 
-        image_base64 = result.data[0].b64_json
+        image_url = file.file_path
 
-        import base64
-
-        image_bytes = base64.b64decode(
-            image_base64
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "صف هذه الصورة بالتفصيل"
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": image_url
+                            }
+                        }
+                    ]
+                }
+            ]
         )
 
-        with open(
-            "generated_image.png",
-            "wb"
-        ) as f:
-            f.write(image_bytes)
+        answer = response.choices[0].message.content
 
-        await update.message.reply_photo(
-            photo=open(
-                "generated_image.png",
-                "rb"
-            )
-        )
+        await update.message.reply_text(answer)
 
     except Exception as e:
+
+        print("VISION ERROR:", e)
 
         await update.message.reply_text(
             f"❌ {e}"
         )
+    
 # ==========================
 # ADMIN PANEL
 # ==========================
@@ -492,7 +516,88 @@ async def agent(update, context):
     await update.message.reply_text(
         response.choices[0].message.content
     )
-    
+
+    # ==========================
+# PDF READER
+# ==========================
+
+async def analyze_pdf(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+
+    try:
+
+        await update.message.reply_text(
+            "📄 جاري قراءة الملف..."
+        )
+
+        document = update.message.document
+
+        file = await context.bot.get_file(
+            document.file_id
+        )
+
+        import tempfile
+
+        with tempfile.NamedTemporaryFile(
+    suffix=".pdf",
+    delete=False
+) as temp_file:
+
+    pdf_path = temp_file.name
+
+        await file.download_to_drive(
+            pdf_path
+        )
+
+        text = ""
+
+        with open(pdf_path, "rb") as pdf_file:
+
+            reader = PyPDF2.PdfReader(
+                pdf_file
+            )
+
+            for page in reader.pages:
+
+                page_text = page.extract_text()
+
+                if page_text:
+                    text += page_text + "\n"
+
+        if len(text) > 15000:
+            text = text[:15000]
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content":
+                    "لخص الملف بشكل احترافي مع أهم النقاط."
+                },
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
+        )
+
+        await update.message.reply_text(
+            response.choices[0].message.content
+        )
+
+        os.remove(pdf_path)
+
+    except Exception as e:
+
+        print("PDF ERROR:", e)
+
+        await update.message.reply_text(
+            f"❌ {e}"
+        )
+        
 # ==========================
 # RUN
 # ==========================
@@ -503,6 +608,10 @@ TELEGRAM_BOT_TOKEN
 
 app.add_handler(
 CommandHandler("start", start)
+)
+
+app.add_handler(
+    CommandHandler("help", help_command)
 )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -580,6 +689,10 @@ app.add_handler(
 CommandHandler("admin", admin)
 )
 
+app.add_handler(
+    CommandHandler("agent", agent)
+)
+
 for cmd in SMART_COMMANDS:
     app.add_handler(
         CommandHandler(
@@ -590,6 +703,20 @@ for cmd in SMART_COMMANDS:
     
 app.add_handler(
 CallbackQueryHandler(button_handler)
+)
+
+app.add_handler(
+    MessageHandler(
+        filters.PHOTO,
+        analyze_photo
+    )
+)
+
+app.add_handler(
+    MessageHandler(
+        filters.Document.PDF,
+        analyze_pdf
+    )
 )
 
 app.add_handler(
