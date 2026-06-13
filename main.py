@@ -20,6 +20,7 @@ import tempfile
 import sqlite3
 import os
 import requests
+import PyPDF2
 
 # ==========================
 # TOKENS
