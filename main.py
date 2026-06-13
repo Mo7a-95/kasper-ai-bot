@@ -19,7 +19,6 @@ from openai import OpenAI
 import sqlite3
 import os
 import requests
-import tempfile
 import PyPDF2
 
 # ==========================
@@ -546,18 +545,16 @@ async def analyze_pdf(
             document.file_id
         )
 
-import tempfile
+        with tempfile.NamedTemporaryFile(
+            suffix=".pdf",
+            delete=False
+        ) as temp_file:
 
-with tempfile.NamedTemporaryFile(
-    suffix=".pdf",
-    delete=False
-) as temp_file:
+            pdf_path = temp_file.name
 
-    pdf_path = temp_file.name
-
-await file.download_to_drive(
-    pdf_path
-)
+        await file.download_to_drive(
+            pdf_path
+        )
 
         text = ""
 
@@ -568,6 +565,11 @@ await file.download_to_drive(
             )
 
             for page in reader.pages:
+
+                page_text = page.extract_text()
+
+                if page_text:
+                    text += page_text + "\n"
 
                 page_text = page.extract_text()
 
