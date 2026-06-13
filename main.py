@@ -16,6 +16,7 @@ from telegram.ext import (
 
 from openai import OpenAI
 
+import tempfile
 import sqlite3
 import os
 import requests
