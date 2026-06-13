@@ -525,7 +525,7 @@ async def agent(update, context):
         response.choices[0].message.content
     )
 
-    # ==========================
+# ==========================
 # PDF READER
 # ==========================
 
@@ -561,16 +561,9 @@ async def analyze_pdf(
 
         with open(pdf_path, "rb") as pdf_file:
 
-            reader = PyPDF2.PdfReader(
-                pdf_file
-            )
+            reader = PdfReader(pdf_file)
 
             for page in reader.pages:
-
-                page_text = page.extract_text()
-
-                if page_text:
-                    text += page_text + "\n"
 
                 page_text = page.extract_text()
 
@@ -580,13 +573,71 @@ async def analyze_pdf(
         if len(text) > 15000:
             text = text[:15000]
 
-if not text.strip():
+        if not text.strip():
 
-    await update.message.reply_text(
-        "❌ الملف لا يحتوي على نص قابل للاستخراج."
-    )
+            await update.message.reply_text(
+                "❌ الملف لا يحتوي على نص قابل للاستخراج."
+            )
+
+            os.remove(pdf_path)
+            return
+
+        print("PDF TEXT:", repr(text[:500]))
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content":
+                    "لخص الملف بشكل احترافي مع أهم النقاط."
+                },
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
+        )
+
+        await update.message.reply_text(
+            response.choices[0].message.content
+        )
+
+        os.remove(pdf_path)
+
+    except Exception as e:
+
+        print("PDF ERROR:", e)
+
+        await update.message.reply_text(
+            f"❌ {e}"
+        )
 
     os.remove(pdf_path)
+    return
+
+print("PDF TEXT:", repr(text[:500]))
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {
+            "role": "system",
+            "content":
+            "لخص الملف بشكل احترافي مع أهم النقاط."
+        },
+        {
+            "role": "user",
+            "content": text
+        }
+    ]
+)
+
+await update.message.reply_text(
+    response.choices[0].message.content
+)
+
+os.remove(pdf_path)
     return
     
         print("PDF TEXT:", repr(text[:500]))
