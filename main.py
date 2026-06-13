@@ -218,6 +218,12 @@ async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🗑 تم حذف الذاكرة."
     )
 
+def clear_memory(user_id):
+    cursor.execute(
+        "DELETE FROM conversations WHERE user_id=?",
+        (user_id,)
+    )
+    db.commit()
 
 # ==========================
 # BUTTONS
@@ -231,12 +237,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if query.data == "memory":
 
-    if query.data == "admin_stats":
-
-    if query.data == "admin_users":
-
-    if query.data == "admin_broadcast":
-        
         user_id = query.from_user.id
 
         cursor.execute(
@@ -263,7 +263,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(
             "استخدم:\n/image وصف الصورة"
         )
-        # ==========================
+        
+# ==========================
 # CHAT
 # ==========================
 
