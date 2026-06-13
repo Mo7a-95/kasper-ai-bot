@@ -589,8 +589,7 @@ async def analyze_pdf(
             messages=[
                 {
                     "role": "system",
-                    "content":
-                    "لخص الملف بشكل احترافي مع أهم النقاط."
+                    "content": "لخص الملف بشكل احترافي مع أهم النقاط."
                 },
                 {
                     "role": "user",
@@ -612,65 +611,6 @@ async def analyze_pdf(
         await update.message.reply_text(
             f"❌ {e}"
         )
-
-    os.remove(pdf_path)
-    return
-
-print("PDF TEXT:", repr(text[:500]))
-
-response = client.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[
-        {
-            "role": "system",
-            "content":
-            "لخص الملف بشكل احترافي مع أهم النقاط."
-        },
-        {
-            "role": "user",
-            "content": text
-        }
-    ]
-)
-
-await update.message.reply_text(
-    response.choices[0].message.content
-)
-
-os.remove(pdf_path)
-    return
-    
-        print("PDF TEXT:", repr(text[:500]))
-        
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content":
-                    "لخص الملف بشكل احترافي مع أهم النقاط."
-                },
-                {
-                    "role": "user",
-                    "content": text
-                }
-            ]
-        )
-
-        await update.message.reply_text(
-            response.choices[0].message.content
-        )
-
-        os.remove(pdf_path)
-
-    except Exception as e:
-
-        print("PDF ERROR:", e)
-
-        await update.message.reply_text(
-            f"❌ {e}"
-        )
-
 async def generate_image(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE
