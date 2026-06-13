@@ -143,13 +143,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     save_user(update.effective_user)
 
     keyboard = [
-            InlineKeyboardButton("🧠 الذاكرة", callback_data="memory"),
-            InlineKeyboardButton("🗑 مسح الذاكرة", callback_data="clear")
-        ],
-        [
-            InlineKeyboardButton("🎨 إنشاء صورة", callback_data="image_help")
-        ]
+    [
+        InlineKeyboardButton("🧠 الذاكرة", callback_data="memory"),
+        InlineKeyboardButton("🗑 مسح الذاكرة", callback_data="clear")
+    ],
+    [
+        InlineKeyboardButton("🎨 إنشاء صورة", callback_data="image_help")
     ]
+]
 
     await update.message.reply_text(
         "أهلاً بك 👋\nأنا Kasper AI\nمساعد ذكي متقدم يعمل بالذكاء الاصطناعي.",
@@ -274,7 +275,7 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         user_id = update.effective_user.id
         user_message = update.message.text
-        )
+        
 
         messages = get_history(user_id)
 
