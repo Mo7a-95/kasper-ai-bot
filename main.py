@@ -580,6 +580,8 @@ async def analyze_pdf(
         if len(text) > 15000:
             text = text[:15000]
 
+        print("PDF TEXT:", repr(text[:500]))
+        
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
