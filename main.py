@@ -580,6 +580,15 @@ async def analyze_pdf(
         if len(text) > 15000:
             text = text[:15000]
 
+        if not text.strip():
+
+    await update.message.reply_text(
+        "❌ الملف لا يحتوي على نص قابل للاستخراج. يبدو أنه PDF مكوّن من صور فقط."
+    )
+
+    os.remove(pdf_path)
+    return
+    
         print("PDF TEXT:", repr(text[:500]))
         
         response = client.chat.completions.create(
