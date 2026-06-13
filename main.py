@@ -606,6 +606,62 @@ async def analyze_pdf(
         await update.message.reply_text(
             f"❌ {e}"
         )
+
+async def generate_image(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+
+    try:
+
+        prompt = " ".join(context.args)
+
+        if not prompt:
+
+            await update.message.reply_text(
+                "اكتب وصفاً بعد الأمر."
+            )
+            return
+
+        await update.message.reply_text(
+            "🎨 جاري إنشاء الصورة..."
+        )
+
+        result = client.images.generate(
+            model="gpt-image-1",
+            prompt=prompt,
+            size="1024x1024"
+        )
+
+        import base64
+
+        image_bytes = base64.b64decode(
+            result.data[0].b64_json
+        )
+
+        with tempfile.NamedTemporaryFile(
+            suffix=".png",
+            delete=False
+        ) as temp_file:
+
+            temp_file.write(image_bytes)
+            temp_path = temp_file.name
+
+        with open(temp_path, "rb") as photo:
+
+            await update.message.reply_photo(
+                photo=photo
+            )
+
+        os.remove(temp_path)
+
+    except Exception as e:
+
+        print("IMAGE ERROR:", e)
+
+        await update.message.reply_text(
+            f"❌ {e}"
+        )
         
 # ==========================
 # RUN
