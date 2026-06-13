@@ -580,10 +580,10 @@ async def analyze_pdf(
         if len(text) > 15000:
             text = text[:15000]
 
-        if not text.strip():
+if not text.strip():
 
     await update.message.reply_text(
-        "❌ الملف لا يحتوي على نص قابل للاستخراج. يبدو أنه PDF مكوّن من صور فقط."
+        "❌ الملف لا يحتوي على نص قابل للاستخراج."
     )
 
     os.remove(pdf_path)
