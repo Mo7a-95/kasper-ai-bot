@@ -924,6 +924,8 @@ print("🚀 Kasper AI Bot Started")
 
 app.post_init = set_commands
 
+init_db()
+
 app.run_polling(
     drop_pending_updates=True
 )
