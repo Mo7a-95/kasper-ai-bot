@@ -142,32 +142,41 @@ def save_user(user):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    save_user(update.effective_user)
+save_user(update.effective_user)
 
-    keyboard = [
-        [
-            InlineKeyboardButton(
-                "🧠 الذاكرة",
-                callback_data="memory"
-            ),
-            InlineKeyboardButton(
-                "🗑 مسح الذاكرة",
-                callback_data="clear"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                "🎨 إنشاء صورة",
-                callback_data="image_help"
-            )
-        ]
+keyboard = [
+    [
+        InlineKeyboardButton(
+            "🧠 الذاكرة",
+            callback_data="memory"
+        ),
+        InlineKeyboardButton(
+            "🗑 مسح الذاكرة",
+            callback_data="clear"
+        )
+    ],
+    [
+        InlineKeyboardButton(
+            "🎨 إنشاء صورة",
+            callback_data="image_help"
+        )
     ]
+]
 
-    await update.message.reply_text(
-        "أهلاً بك 👋\nأنا Kasper AI\nمساعد ذكي متقدم يعمل بالذكاء الاصطناعي.",
-        reply_markup=InlineKeyboardMarkup(keyboard)
-    )
+if update.effective_user.id == ADMIN_ID:
+    keyboard.append([
+        InlineKeyboardButton(
+            "👑 لوحة المشرف",
+            callback_data="open_admin"
+        )
+    ])
 
+await update.message.reply_text(
+    "🤖 Kasper AI\n\n"
+    "مساعد ذكي متقدم يعمل بالذكاء الاصطناعي.\n\n"
+    "اختر أحد الخيارات التالية:",
+    reply_markup=InlineKeyboardMarkup(keyboard)
+)
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
