@@ -21,6 +21,8 @@ import sqlite3
 import os
 import requests
 from pypdf import PdfReader
+import base64
+from pdf2image import convert_from_path
 
 # ==========================
 # TOKENS
@@ -553,47 +555,107 @@ async def analyze_pdf(
 
             pdf_path = temp_file.name
 
-        await file.download_to_drive(
-            pdf_path
-        )
+        await file.download_to_drive(pdf_path)
 
         text = ""
 
-        with open(pdf_path, "rb") as pdf_file:
+        try:
 
-            reader = PdfReader(pdf_file)
+            with open(pdf_path, "rb") as pdf_file:
 
-            for page in reader.pages:
+                reader = PdfReader(pdf_file)
 
-                page_text = page.extract_text()
+                for page in reader.pages:
 
-                if page_text:
-                    text += page_text + "\n"
+                    page_text = page.extract_text()
 
-        if len(text) > 15000:
-            text = text[:15000]
+                    if page_text:
+                        text += page_text + "\n"
 
-        if not text.strip():
+        except Exception as pdf_error:
+
+            print("PDF READ ERROR:", pdf_error)
+
+        # ==========================
+        # PDF يحتوي نصاً
+        # ==========================
+
+        if text.strip():
+
+            if len(text) > 15000:
+                text = text[:15000]
+
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "لخص الملف بشكل احترافي مع أهم النقاط."
+                    },
+                    {
+                        "role": "user",
+                        "content": text
+                    }
+                ]
+            )
 
             await update.message.reply_text(
-                "❌ الملف لا يحتوي على نص قابل للاستخراج."
+                response.choices[0].message.content
             )
 
             os.remove(pdf_path)
             return
 
-        print("PDF TEXT:", repr(text[:500]))
+        # ==========================
+        # PDF عبارة عن صورة
+        # ==========================
+
+        await update.message.reply_text(
+            "🖼 الملف يحتوي صوراً، جارٍ تحليل المحتوى..."
+        )
+
+        pages = convert_from_path(
+            pdf_path,
+            first_page=1,
+            last_page=1
+        )
+
+        image_path = pdf_path + ".png"
+
+        pages[0].save(
+            image_path,
+            "PNG"
+        )
+
+        with open(image_path, "rb") as img:
+
+            image_b64 = base64.b64encode(
+                img.read()
+            ).decode()
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[
                 {
-                    "role": "system",
-                    "content": "لخص الملف بشكل احترافي مع أهم النقاط."
-                },
-                {
                     "role": "user",
-                    "content": text
+                    "content": [
+                        {
+                            "type": "text",
+                            "text":
+                            """
+استخرج النص من الصورة إن وجد.
+إذا لم يوجد نص فاشرح محتوى الصفحة
+ولخصها بشكل احترافي.
+"""
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url":
+                                f"data:image/png;base64,{image_b64}"
+                            }
+                        }
+                    ]
                 }
             ]
         )
@@ -603,65 +665,13 @@ async def analyze_pdf(
         )
 
         os.remove(pdf_path)
+        os.remove(image_path)
 
     except Exception as e:
 
-        print("PDF ERROR:", e)
+        import traceback
 
-        await update.message.reply_text(
-            f"❌ {e}"
-        )
-async def generate_image(
-    update: Update,
-    context: ContextTypes.DEFAULT_TYPE
-):
-
-    try:
-
-        prompt = " ".join(context.args)
-
-        if not prompt:
-
-            await update.message.reply_text(
-                "اكتب وصفاً بعد الأمر."
-            )
-            return
-
-        await update.message.reply_text(
-            "🎨 جاري إنشاء الصورة..."
-        )
-
-        result = client.images.generate(
-            model="gpt-image-1",
-            prompt=prompt,
-            size="1024x1024"
-        )
-
-        import base64
-
-        image_bytes = base64.b64decode(
-            result.data[0].b64_json
-        )
-
-        with tempfile.NamedTemporaryFile(
-            suffix=".png",
-            delete=False
-        ) as temp_file:
-
-            temp_file.write(image_bytes)
-            temp_path = temp_file.name
-
-        with open(temp_path, "rb") as photo:
-
-            await update.message.reply_photo(
-                photo=photo
-            )
-
-        os.remove(temp_path)
-
-    except Exception as e:
-
-        print("IMAGE ERROR:", e)
+        print(traceback.format_exc())
 
         await update.message.reply_text(
             f"❌ {e}"
