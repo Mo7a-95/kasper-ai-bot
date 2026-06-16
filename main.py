@@ -444,32 +444,32 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     messages = cursor.fetchone()[0]
 
-keyboard = [
-[
-InlineKeyboardButton(
-"📊 الإحصائيات",
-callback_data="admin_stats"
-)
-],
-[
-InlineKeyboardButton(
-f"👥 المستخدمون ({users})",
-callback_data="admin_users"
-)
-],
-[
-InlineKeyboardButton(
-f"📢 الإذاعة ({messages})",
-callback_data="admin_broadcast"
-)
-]
-]
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "📊 الإحصائيات",
+                callback_data="admin_stats"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                f"👥 المستخدمون ({users})",
+                callback_data="admin_users"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                f"📢 الإذاعة ({messages})",
+                callback_data="admin_broadcast"
+            )
+        ]
+    ]
 
     await update.message.reply_text(
         "👑 لوحة المشرف",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
-    
+
 # ==========================
 # MY ID
 # ==========================
