@@ -465,6 +465,8 @@ async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🆔 Your ID:\n{update.effective_user.id}"
     )
 
+x = 1 / 0
+
 # ==========================
 # SMART COMMANDS
 # ==========================
@@ -928,9 +930,9 @@ app.post_init = set_commands
 
 async def error_handler(update, context):
 
-    import traceback
+    print("ERROR OCCURRED")
 
-    print(traceback.format_exc())
+    print(context.error)
 
 app.add_error_handler(error_handler)
 
