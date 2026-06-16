@@ -437,13 +437,13 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ],
         [
             InlineKeyboardButton(
-                "👥 20",
+                "👥 {users}",
                 callback_data="admin_users"
             )
         ],
         [
             InlineKeyboardButton(
-                "📢 230",
+                "📢 {messages}",
                 callback_data="admin_broadcast"
             )
         ]
