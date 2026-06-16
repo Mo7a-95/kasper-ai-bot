@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS users(
 
 db.commit()
 
-MAX_MEMORY = 100
+MAX_MEMORY = 20
 
 # ==========================
 # MEMORY FUNCTIONS
@@ -416,6 +416,8 @@ async def analyze_photo(
 # ==========================
 # ADMIN PANEL
 # ==========================
+
+ADMIN_ID = 685333833
 
 async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -923,6 +925,14 @@ async def set_commands(app):
 print("🚀 Kasper AI Bot Started")
 
 app.post_init = set_commands
+
+async def error_handler(update, context):
+
+    import traceback
+
+    print(traceback.format_exc())
+
+app.add_error_handler(error_handler)
 
 app.run_polling(
     drop_pending_updates=True
