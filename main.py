@@ -136,7 +136,7 @@ def save_user(user):
 
     db.commit()
     
-    # ==========================
+# ==========================
 # COMMANDS
 # ==========================
 
@@ -145,14 +145,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     save_user(update.effective_user)
 
     keyboard = [
-    [
-        InlineKeyboardButton("🧠 الذاكرة", callback_data="memory"),
-        InlineKeyboardButton("🗑 مسح الذاكرة", callback_data="clear")
-    ],
-    [
-        InlineKeyboardButton("🎨 إنشاء صورة", callback_data="image_help")
+        [
+            InlineKeyboardButton(
+                "🧠 الذاكرة",
+                callback_data="memory"
+            ),
+            InlineKeyboardButton(
+                "🗑 مسح الذاكرة",
+                callback_data="clear"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "🎨 إنشاء صورة",
+                callback_data="image_help"
+            )
+        ]
     ]
-]
 
     await update.message.reply_text(
         "أهلاً بك 👋\nأنا Kasper AI\nمساعد ذكي متقدم يعمل بالذكاء الاصطناعي.",
@@ -220,11 +229,32 @@ async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🗑 تم حذف الذاكرة."
     )
 
+
 def clear_memory(user_id):
+
     cursor.execute(
         "DELETE FROM conversations WHERE user_id=?",
         (user_id,)
     )
+
+    db.commit()
+
+
+def save_user(user):
+
+    cursor.execute(
+        """
+        INSERT OR REPLACE INTO users
+        (user_id, username, first_name)
+        VALUES (?, ?, ?)
+        """,
+        (
+            user.id,
+            user.username,
+            user.first_name
+        )
+    )
+
     db.commit()
 
 # ==========================
