@@ -270,32 +270,27 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.answer()
 
-    if query.data == "admin_stats":
+if query.data == "admin_stats":
 
-        user_id = query.from_user.id
+    cursor.execute(
+        "SELECT COUNT(*) FROM conversations"
+    )
+    total_messages = cursor.fetchone()[0]
 
-        cursor.execute(
-            "SELECT COUNT(*) FROM conversations WHERE user_id=?",
-            (user_id,)
-        )
+    cursor.execute(
+        "SELECT COUNT(*) FROM users"
+    )
+    total_users = cursor.fetchone()[0]
 
-        count = cursor.fetchone()[0]
+    await query.message.reply_text(
+        f"""
+📊 الإحصائيات
 
-        await query.message.reply_text(
-            f"🧠 عدد الرسائل المحفوظة: {count}"
-        )
+🧠 عدد الرسائل المحفوظة: {total_messages}
 
-    elif query.data == "admin_users":
-
-        cursor.execute(
-            "SELECT COUNT(DISTINCT user_id) FROM conversations"
-        )
-
-        users = cursor.fetchone()[0]
-
-        await query.message.reply_text(
-            f"👥 عدد المستخدمين: {users}"
-        )
+👥 عدد المستخدمين: {total_users}
+"""
+    )
 
     elif query.data == "admin_broadcast":
 
