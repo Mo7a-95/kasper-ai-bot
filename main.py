@@ -676,7 +676,12 @@ async def analyze_pdf(
         await update.message.reply_text(
             f"❌ {e}"
         )
-        
+
+async def generate_image(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+    
 # ==========================
 # RUN
 # ==========================
