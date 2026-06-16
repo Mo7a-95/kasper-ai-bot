@@ -681,13 +681,54 @@ async def generate_image(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE
 ):
+
+    try:
+
+        prompt = " ".join(context.args)
+
+        if not prompt:
+            await update.message.reply_text(
+                "اكتب وصف الصورة بعد الأمر /image"
+            )
+            return
+
+        await update.message.reply_text(
+            "🎨 جاري إنشاء الصورة..."
+        )
+
+        result = client.images.generate(
+            model="gpt-image-1",
+            prompt=prompt,
+            size="1024x1024"
+        )
+
+        import base64
+
+        image_bytes = base64.b64decode(
+            result.data[0].b64_json
+        )
+
+        image_path = "generated.png"
+
+        with open(image_path, "wb") as f:
+            f.write(image_bytes)
+
+        with open(image_path, "rb") as photo:
+            await update.message.reply_photo(photo)
+
+        os.remove(image_path)
+
+    except Exception as e:
+        await update.message.reply_text(
+            f"❌ {e}"
+        )
     
 # ==========================
 # RUN
 # ==========================
 
 app = ApplicationBuilder().token(
-TELEGRAM_BOT_TOKEN
+    TELEGRAM_BOT_TOKEN
 ).build()
 
 app.add_handler(
