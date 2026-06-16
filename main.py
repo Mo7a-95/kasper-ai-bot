@@ -281,31 +281,32 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if query.data == "admin_stats":
 
-    cursor.execute(
-        "SELECT COUNT(*) FROM conversations"
-    )
-    total_messages = cursor.fetchone()[0]
+cursor.execute("SELECT COUNT(*) FROM users")
+total_users = cursor.fetchone()[0]
 
-    cursor.execute(
-        "SELECT COUNT(*) FROM users"
-    )
-    total_users = cursor.fetchone()[0]
+cursor.execute("SELECT COUNT(*) FROM conversations")
+total_messages = cursor.fetchone()[0]
 
-    await query.message.reply_text(
-        f"""
-📊 الإحصائيات
+await query.message.reply_text(
+    f"📊 الإحصائيات\n\n"
+    f"👥 عدد المستخدمين: {total_users}\n"
+    f"🧠 عدد الرسائل المحفوظة: {total_messages}"
+)
 
-🧠 عدد الرسائل المحفوظة: {total_messages}
+elif query.data == "admin_users":
 
-👥 عدد المستخدمين: {total_users}
-"""
-    )
+cursor.execute("SELECT COUNT(*) FROM users")
+total_users = cursor.fetchone()[0]
 
-    elif query.data == "admin_broadcast":
+await query.message.reply_text(
+    f"👥 عدد المستخدمين: {total_users}"
+)
 
-        await query.message.reply_text(
-            "📢 ميزة الإذاعة قيد التطوير."
-        )
+elif query.data == "admin_broadcast":
+
+await query.message.reply_text(
+    "📢 ميزة الإذاعة قيد التطوير."
+)
 
     elif query.data == "clear":
 
@@ -445,26 +446,26 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     messages = cursor.fetchone()[0]
 
-    keyboard = [
-        [
-            InlineKeyboardButton(
-                "📊 الإحصائيات",
-                callback_data="admin_stats"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                f"👥 {users}",
-                callback_data="admin_users"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                f"📢 {messages}",
-                callback_data="admin_broadcast"
-            )
-        ]
-    ]
+keyboard = [
+[
+InlineKeyboardButton(
+"📊 الإحصائيات",
+callback_data="admin_stats"
+)
+],
+[
+InlineKeyboardButton(
+f"👥 المستخدمون ({users})",
+callback_data="admin_users"
+)
+],
+[
+InlineKeyboardButton(
+f"📢 الإذاعة ({messages})",
+callback_data="admin_broadcast"
+)
+]
+]
 
     await update.message.reply_text(
         "👑 لوحة المشرف",
