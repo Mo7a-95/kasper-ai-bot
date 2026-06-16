@@ -174,6 +174,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = """
 الأوامر المتاحة:
 
+/admin
+لوحة المشرف
+
 /start
 بدء البوت
 
