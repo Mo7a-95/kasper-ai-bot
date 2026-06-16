@@ -252,6 +252,24 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"🧠 عدد الرسائل المحفوظة: {count}"
         )
 
+    elif query.data == "admin_users":
+
+        cursor.execute(
+            "SELECT COUNT(DISTINCT user_id) FROM conversations"
+        )
+
+        users = cursor.fetchone()[0]
+
+        await query.message.reply_text(
+            f"👥 عدد المستخدمين: {users}"
+        )
+
+    elif query.data == "admin_broadcast":
+
+        await query.message.reply_text(
+            "📢 ميزة الإذاعة قيد التطوير."
+        )
+
     elif query.data == "clear":
 
         clear_memory(query.from_user.id)
@@ -265,7 +283,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(
             "استخدم:\n/image وصف الصورة"
         )
-        
+
 # ==========================
 # CHAT
 # ==========================
