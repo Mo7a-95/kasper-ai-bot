@@ -237,7 +237,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.answer()
 
-    if query.data == "memory":
+    if query.data == "admin_stats":
 
         user_id = query.from_user.id
 
@@ -387,13 +387,13 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ],
         [
             InlineKeyboardButton(
-                "👥 المستخدمون",
+                "👥 20",
                 callback_data="admin_users"
             )
         ],
         [
             InlineKeyboardButton(
-                "📢 إرسال إعلان",
+                "📢 230",
                 callback_data="admin_broadcast"
             )
         ]
