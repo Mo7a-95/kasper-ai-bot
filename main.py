@@ -465,8 +465,6 @@ async def myid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🆔 Your ID:\n{update.effective_user.id}"
     )
 
-x = 1 / 0
-
 # ==========================
 # SMART COMMANDS
 # ==========================
