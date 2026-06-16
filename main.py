@@ -279,34 +279,34 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.answer()
 
-if query.data == "admin_stats":
+    if query.data == "admin_stats":
 
-cursor.execute("SELECT COUNT(*) FROM users")
-total_users = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM users")
+        total_users = cursor.fetchone()[0]
 
-cursor.execute("SELECT COUNT(*) FROM conversations")
-total_messages = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM conversations")
+        total_messages = cursor.fetchone()[0]
 
-await query.message.reply_text(
-    f"📊 الإحصائيات\n\n"
-    f"👥 عدد المستخدمين: {total_users}\n"
-    f"🧠 عدد الرسائل المحفوظة: {total_messages}"
-)
+        await query.message.reply_text(
+            f"📊 الإحصائيات\n\n"
+            f"👥 عدد المستخدمين: {total_users}\n"
+            f"🧠 عدد الرسائل المحفوظة: {total_messages}"
+        )
 
-elif query.data == "admin_users":
+    elif query.data == "admin_users":
 
-cursor.execute("SELECT COUNT(*) FROM users")
-total_users = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM users")
+        total_users = cursor.fetchone()[0]
 
-await query.message.reply_text(
-    f"👥 عدد المستخدمين: {total_users}"
-)
+        await query.message.reply_text(
+            f"👥 عدد المستخدمين: {total_users}"
+        )
 
-elif query.data == "admin_broadcast":
+    elif query.data == "admin_broadcast":
 
-await query.message.reply_text(
-    "📢 ميزة الإذاعة قيد التطوير."
-)
+        await query.message.reply_text(
+            "📢 ميزة الإذاعة قيد التطوير."
+        )
 
     elif query.data == "clear":
 
