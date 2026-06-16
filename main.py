@@ -428,6 +428,16 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
+    cursor.execute(
+        "SELECT COUNT(*) FROM users"
+    )
+    users = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM conversations"
+    )
+    messages = cursor.fetchone()[0]
+
     keyboard = [
         [
             InlineKeyboardButton(
@@ -437,13 +447,13 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ],
         [
             InlineKeyboardButton(
-                "👥 {users}",
+                f"👥 {users}",
                 callback_data="admin_users"
             )
         ],
         [
             InlineKeyboardButton(
-                "📢 {messages}",
+                f"📢 {messages}",
                 callback_data="admin_broadcast"
             )
         ]
@@ -453,8 +463,7 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👑 لوحة المشرف",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
-
-
+    
 # ==========================
 # MY ID
 # ==========================
