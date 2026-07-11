@@ -170,10 +170,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
 
     await update.message.reply_text(
-        "🤖 Kasper AI\n\n"
-        "مساعد ذكي متقدم يعمل بالذكاء الاصطناعي.\n\n"
-        "اختر أحد الخيارات التالية:",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        "🤖 AI Bot"
+        "أنا مساعدك الذكي الذي يعمل بالذكاء الاصطناعي."
+        " إبدأ بكتابة سؤالك أو أرسل أي صورة أو أي ملف، وسأساعدك على ما تريد.",
     )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
