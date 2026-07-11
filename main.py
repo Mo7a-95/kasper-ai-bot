@@ -185,8 +185,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         ━━━━━━━━━━━━━━
 
-💡 * إكتب رسالتك في الأسفل للبدء ...
-""",
+"💡 * إكتب رسالتك في الأسفل للبدء ...",
     )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
