@@ -170,7 +170,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
 
     await update.message.reply_text(
-مرحباً بك ... 👋
+        "مرحباً بك ... 👋\n\n"
 
 أنا مساعدك الذكي والذي يعمل بالذكاء الإصطناعي .
 
