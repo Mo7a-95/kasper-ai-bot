@@ -179,7 +179,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     "🌍 الترجمة\n"
     "🎨 إنشاء الصور\n"
     "📄 تحليل الصور وملفات PDF\n\n"
-    "                     ━━━━━━━━━━━━━━━\n\n"
+    "                         ━━━━━━━━━━━━━━━\n\n"
     "💡 إكتب رسالتك في الأسفل للبدء ..."
         
     )
@@ -198,7 +198,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 /newchat
 بدء محادثة جديدة
 
-/image أذكر وصفاً للصورة لإنشائها 
+/image 
+أذكر وصفاً للصورة لإنشائها 
 """
 
     await update.message.reply_text(text)
