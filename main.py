@@ -171,7 +171,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
     "مرحباً بك،... 👋 \n\n"
-    "أنا مساعدك الذكي AI Bot 🤖 والذي يعمل بالذكاء الإصطناعي .\n\n"
+    "أنا مساعدك الذكي { AI Bot 🤖 } والذي يعمل بالذكاء الإصطناعي .\n\n"
     "✨ يمكنني مساعدتك في :\n\n"
     "💬 الإجابة على الأسئلة\n"
     "💻 البرمجة وكتابة الأكواد\n"
@@ -179,7 +179,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     "🌍 الترجمة\n"
     "🎨 إنشاء الصور\n"
     "📄 تحليل الصور وملفات PDF\n\n"
-    "                             ━━━━━━━━━━━━━━━\n\n"
+    "                                 ━━━━━━━━━━━━━━━\n\n"
     "💡 إكتب رسالتك في الأسفل للبدء ..."
         
     )
@@ -196,7 +196,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 المساعدة
 
 /newchat
-بدء محادثة جديدة
+بدء محادثة جديدة ومسح الذاكرة السابقة
 
 /image 
 أذكر وصفاً للصورة لإنشائها 
