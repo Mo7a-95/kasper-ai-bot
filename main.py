@@ -189,9 +189,6 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = """
 الأوامر المتاحة:
 
-/admin
-لوحة المشرف
-
 /start
 بدء البوت
 
@@ -201,14 +198,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 /newchat
 بدء محادثة جديدة
 
-/memory
-عرض عدد الرسائل المحفوظة
-
-/clear
-حذف الذاكرة
-
-/image وصف الصورة
-لإنشاء صورة جديدة
+/image أذكر وصفاً للصورة لإنشائها 
 """
 
     await update.message.reply_text(text)
