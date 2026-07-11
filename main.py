@@ -170,10 +170,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
 
     await update.message.reply_text(
-        "🤖 AI Bot\n\n"
+        "🤖 { AI Bot } \n\n"
         "أنا مساعدك الذكي الذي يعمل بالذكاء الاصطناعي\n\n"
         "أرسل لي أي صورة أو أي ملف\n\n"
-        "وسأساعدك",
+        "وسأساعدك"
     )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
