@@ -183,7 +183,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🎨 إنشاء الصور"
         "📄 تحليل الصور وملفات PDF"
 
-        ━━━━━━━━━━━━━━
+        "━━━━━━━━━━━━━━"
 
 "💡 * إكتب رسالتك في الأسفل للبدء ...",
     )
