@@ -179,7 +179,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     "🌍 الترجمة\n"
     "🎨 إنشاء الصور\n"
     "📄 تحليل الصور وملفات PDF\n\n"
-    "                                         ━━━━━━━━━━━━━━━\n\n"
+    "                                             ━━━━━━━━━━━━━━━\n\n"
     "💡 إكتب رسالتك في الأسفل للبدء ..."
         
     )
