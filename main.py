@@ -915,7 +915,6 @@ async def set_commands(app):
     commands = [
     BotCommand("start", "بدء الإستخدام"),
     BotCommand("help", "مساعدة"),
-    BotCommand("newchat", "محادثة جديدة"),
 
     ]
 
