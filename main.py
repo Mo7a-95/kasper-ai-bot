@@ -189,12 +189,6 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = """
 الأوامر المتاحة:
 
-/start
-بدء البوت
-
-/help
-المساعدة
-
 /newchat
 بدء محادثة جديدة ومسح الذاكرة السابقة
 
