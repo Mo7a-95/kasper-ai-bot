@@ -335,12 +335,12 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         messages = get_history(user_id)
 
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=messages
+        response = client.responses.create(
+        model="gpt-5",
+        input=messages
         )
 
-        answer = response.choices[0].message.content
+        answer = response.output_text
 
         save_message(
             user_id,
