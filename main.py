@@ -343,6 +343,9 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
             input=messages
         )
 
+        print("✅ OpenAI request succeeded")
+        print(response)
+        
         answer = response.output_text
 
         save_message(
