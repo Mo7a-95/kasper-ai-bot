@@ -335,9 +335,12 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         messages = get_history(user_id)
 
+        # للتأكد من النموذج المستخدم
+        print("Using model: gpt-5")
+
         response = client.responses.create(
-        model="gpt-5",
-        input=messages
+            model="gpt-5",
+            input=messages
         )
 
         answer = response.output_text
