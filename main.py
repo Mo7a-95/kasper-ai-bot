@@ -16,11 +16,6 @@ from telegram.ext import (
 
 from openai import OpenAI
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    timeout=300
-)
-
 import tempfile
 import sqlite3
 import os
