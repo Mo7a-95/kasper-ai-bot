@@ -342,7 +342,12 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_message
         )
 
-        messages = get_history(user_id)
+        messages = [
+    {
+        "role": "user",
+        "content": "قل فقط: مرحباً من GPT-5"
+    }
+]
 
         print("=== CHAT CALLED ===")
         print("User:", user_id)
