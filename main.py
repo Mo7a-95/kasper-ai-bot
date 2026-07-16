@@ -360,11 +360,15 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
             answer
         )
 
+        print("Sending to Telegram...")
+        
         await send_long_message(
             update.message,
             answer
         )
 
+        print("✅ Sent to Telegram")
+        
     except Exception as e:
 
         import traceback
