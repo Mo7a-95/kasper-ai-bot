@@ -337,37 +337,24 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         messages = get_history(user_id)
 
-        print("=== CHAT CALLED ===")
-        print("User:", user_id)
-        print("Model: gpt-5")
-        print("Sending request to OpenAI...")
-
         response = client.responses.create(
             model="gpt-5",
             input=messages,
             timeout=300
         )
 
-        print("✅ OpenAI request finished")
-
         answer = response.output_text
-
-        print("Answer length:", len(answer))
 
         save_message(
             user_id,
             "assistant",
             answer
         )
-
-        print("Sending to Telegram...")
         
         await send_long_message(
             update.message,
             answer
         )
-
-        print("✅ Sent to Telegram")
         
     except Exception as e:
 
