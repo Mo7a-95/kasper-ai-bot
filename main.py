@@ -327,6 +327,7 @@ async def send_long_message(message, text):
             text[i:i + MAX_LENGTH]
         )
 
+
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
 
@@ -343,13 +344,22 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         messages = get_history(user_id)
 
+        print("=== CHAT CALLED ===")
+        print("User:", user_id)
+        print("Model: gpt-5")
+        print("Sending request to OpenAI...")
+
         response = client.responses.create(
             model="gpt-5",
             input=messages,
             timeout=300
         )
 
+        print("✅ OpenAI request finished")
+
         answer = response.output_text
+
+        print("Answer length:", len(answer))
 
         save_message(
             user_id,
@@ -370,6 +380,7 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(
             f"❌ {e}"
+
         )
 
 # ==========================
