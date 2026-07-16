@@ -332,10 +332,8 @@ async def send_long_message(message, text):
             text[i:i + MAX_LENGTH]
         )
 
-
-    async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-        try:
+async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
 
         save_user(update.effective_user)
 
