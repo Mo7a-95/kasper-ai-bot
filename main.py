@@ -35,6 +35,14 @@ ADMIN_ID = 685333833
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+import telegram
+import openai
+
+print("Telegram version:", telegram.__version__)
+print("OpenAI version:", openai.__version__)
+print("Telegram token exists:", bool(TELEGRAM_BOT_TOKEN))
+print("OpenAI key exists:", bool(OPENAI_API_KEY))
+
 # ==========================
 # DATABASE
 # ==========================
