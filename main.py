@@ -318,6 +318,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # CHAT
 # ==========================
 
+async def send_long_message(message, text):
+
+    MAX_LENGTH = 4000
+
+    for i in range(0, len(text), MAX_LENGTH):
+        await message.reply_text(
+            text[i:i + MAX_LENGTH]
+        )
+
+
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
@@ -339,7 +349,7 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
             model="gpt-5",
             input=messages
         )
-        
+
         answer = response.output_text
 
         save_message(
@@ -348,11 +358,16 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
             answer
         )
 
-        await update.message.reply_text(answer)
+        await send_long_message(
+            update.message,
+            answer
+        )
 
     except Exception as e:
 
-        print("CHAT ERROR:", e)
+        import traceback
+
+        print(traceback.format_exc())
 
         await update.message.reply_text(
             f"❌ {e}"
