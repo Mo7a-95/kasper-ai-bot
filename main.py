@@ -126,21 +126,6 @@ def get_history(user_id):
         })
 
     return messages
-
-    cursor.execute(
-        """
-        INSERT OR IGNORE INTO users
-        (user_id, username, first_name)
-        VALUES (?, ?, ?)
-        """,
-        (
-            user.id,
-            user.username,
-            user.first_name
-        )
-    )
-
-    db.commit()
     
 # ==========================
 # COMMANDS
