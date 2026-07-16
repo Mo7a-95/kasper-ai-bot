@@ -16,6 +16,11 @@ from telegram.ext import (
 
 from openai import OpenAI
 
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    timeout=300
+)
+
 import tempfile
 import sqlite3
 import os
@@ -347,7 +352,8 @@ try:
 
         response = client.responses.create(
             model="gpt-5",
-            input=messages
+            input=messages,
+            timeout=300
         )
 
         answer = response.output_text
