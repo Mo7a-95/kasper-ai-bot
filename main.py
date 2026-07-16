@@ -307,6 +307,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(
             "🗑 تم حذف الذاكرة."
         )
+        
     elif query.data == "image_help":
 
         await query.message.reply_text(
