@@ -105,7 +105,7 @@ def get_history(user_id):
             "role": "system",
             "content":
             """
-            أنت Kasper AI.
+            أنت { AI Bot 🤖 }.
 
             مساعد ذكي متقدم.
             تتحدث العربية بطلاقة.
@@ -810,7 +810,7 @@ app.add_handler(
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = """
-🤖 Kasper AI
+{ AI Bot 🤖 }
 
 الأوامر الأساسية:
 
@@ -929,7 +929,7 @@ async def set_commands(app):
 
     await app.bot.set_my_commands(commands)
     
-print("🚀 Kasper AI Bot Started")
+print("🚀 { AI Bot 🤖 } Started")
 
 app.post_init = set_commands
 
