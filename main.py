@@ -944,4 +944,3 @@ app.add_error_handler(error_handler)
 app.run_polling(
     drop_pending_updates=True
 )
-
